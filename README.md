@@ -1,7 +1,7 @@
 # Computational Pathology Tutorial
 
 <p align="center">
-  <img src="assets/images/pipeline.png" alt="Computational pathology pipeline" width="100%">
+  <img src="assets/images/pipeline.svg" alt="Computational pathology pipeline" width="100%">
 </p>
 
 Beginner-friendly, project-based training for people with:
