@@ -16,6 +16,7 @@ Dataset: [huggingface page](https://huggingface.co/datasets/W8Yi/tcga-wsi-uni2h-
 Status: ongoing expansion toward full TCGA slide coverage.
 
 2. Distilled WSI tile generative model  
+Model: [huggingface page](https://huggingface.co/datasets/W8Yi/distilled-wsi-diffusion)   
 Purpose: practical synthetic tile generation for data augmentation and education.
 
 3. Our own DINOv3 encoder trained on WSI tiles  
