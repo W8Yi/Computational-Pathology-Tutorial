@@ -67,8 +67,9 @@ Estimated time to first successful run: 40 to 60 minutes.
 
 1. Read `00_start_here/README.md` (5 to 10 min).
 2. Choose a path in `00_start_here/learning_paths.md` (5 min).
-3. Run `03_hands_on/notebooks/01_tutorial_starter.ipynb` (30 to 45 min).
-4. Complete `04_case_studies/01_guided` then `04_case_studies/02_capstone` (2 to 4+ hours).
+3. Run `02_hands_on/notebooks/01_tutorial_starter.ipynb` (30 to 45 min).
+4. Complete `03_case_studies/01_guided` then `03_case_studies/02_capstone` (2 to 4+ hours).
+5. Explore `04_advanced_topics/` for next-stage methods (optional).
 
 ## Pipeline Walkthrough
 
@@ -109,7 +110,7 @@ Output: attention heatmaps, top-attended tiles, and visual QA artifacts.
 </p>
 
 
-### 4) Advanced Methods (Planned)
+### 4) Advanced Topics (Planned)
 
 Purpose: expose learners to modern, high-impact research directions after they master the core workflow.
 
@@ -122,13 +123,12 @@ Coverage:
 
 ## Repository Map
 
-Top-level numbering note: `02_*` is intentionally reserved for an upcoming bridge module between foundations and hands-on implementation.
-
 ```text
 00_start_here/                   onboarding and learner pathways
-01_foundations/                  medicine-for-CS and CS-for-medicine bridge modules
-03_hands_on/                     notebooks, source modules, configs, tests
-04_case_studies/                 guided projects and capstone work
+01_foundations/                  bridge content organized as notebooks and code
+02_hands_on/                     notebooks, source modules, configs, tests
+03_case_studies/                 guided projects and capstone work
+04_advanced_topics/              advanced methods and research extensions
 assets/                          shared visuals and diagrams
 data/                            tutorial-safe sample data and datasheets
 glossary/                        plain-language definitions
