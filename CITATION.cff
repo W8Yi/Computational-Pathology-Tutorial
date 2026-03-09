@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this tutorial, please cite it using the metadata below."
+title: "Computational Pathology Tutorial"
+version: "0.1.0"
+date-released: "2026-03-09"
+license: "MIT"
+authors:
+  - name: "WQ50 Team"
+keywords:
+  - computational pathology
+  - digital pathology
+  - machine learning
+  - multiple instance learning
+  - tutorial
+abstract: >-
+  Beginner-friendly computational pathology tutorial covering the full pipeline
+  from whole-slide image preprocessing to MIL modeling, interpretability,
+  and publication-ready outputs.
+url: "https://github.com/<your-org-or-user>/Computational-Pathology-Tutorial"

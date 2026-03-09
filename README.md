@@ -4,93 +4,176 @@
   <img src="assets/images/pipeline.svg" alt="Computational pathology pipeline" width="100%">
 </p>
 
-Beginner-friendly, project-based training for people with:
-- limited computer science background, or
-- limited medical/pathology background.
+A professional, beginner-friendly tutorial for learners with limited coding or limited medical background.  
+The goal is simple: go from whole-slide images to trustworthy, interpretable predictions, then publish your work.
 
-## Why This Project
+## Highlights
 
-Computational pathology is highly impactful, but most learning resources assume strong experience in either medicine or coding. This repository bridges both gaps with step-by-step modules, practical notebooks, and publishable outputs.
+We are building an open-source set of core WSI resources for learners and researchers:
+
+1. Precomputed UNI2-h features for TCGA WSIs  
+Dataset: [huggingface page](https://huggingface.co/datasets/W8Yi/tcga-wsi-uni2h-features)  
+Status: ongoing expansion toward full TCGA slide coverage.
+
+2. Distilled WSI tile generative model  
+Purpose: practical synthetic tile generation for data augmentation and education.
+
+3. Our own DINOv3 encoder trained on WSI tiles  
+Purpose: a strong in-house feature backbone aligned with pathology tile workflows.
+
+## Data Access and Compute Notes
+
+- The starter notebook runs on synthetic data and should work on CPU-only machines.
+- Real WSI workflows may require downloading slides from [TCGA/GDC](https://portal.gdc.cancer.gov/), [CPTAC collections in IDC](https://portal.imaging.datacommons.cancer.gov/explore/collections), [PANDA on Kaggle](https://www.kaggle.com/competitions/prostate-cancer-grade-assessment), [TCIA](https://www.cancerimagingarchive.net/), or other open-source repositories.
+- Precomputed TCGA UNI2-h features are available on [Hugging Face](https://huggingface.co/datasets/W8Yi/tcga-wsi-uni2h-features).
+- Storage needs increase quickly for real-slide experiments (often tens to hundreds of GB depending on subset and artifacts).
+- GPU is recommended for advanced encoder training and diffusion-based generation modules.
 
 ## Who This Is For
 
-- Medical learners who want to learn coding and ML for pathology.
-- Technical learners who want to understand pathology workflow and clinical context.
-- Educators who want reusable materials for classes and workshops.
+- Medical learners who want practical AI skills for pathology
+- CS learners who need clinical and pathology context
+- Educators building reproducible teaching materials
 
-## Learning Outcomes
+## What You Will Build
 
-By completing this tutorial, learners should be able to:
-- explain core pathology and machine learning concepts in plain language,
-- run a reproducible baseline computational pathology pipeline,
-- evaluate model outputs with clinically relevant reasoning,
-- build a small capstone project and present/publicize it.
+By the end of the core path, you will be able to produce:
 
-## Repository Map
+- A baseline slide-level pathology prediction workflow
+- A reproducible train/evaluation pipeline with standard metrics
+- An attention-based interpretation artifact (for example, heatmaps/top-attended tiles)
+- A case-study style write-up suitable for project reports or early manuscripts
 
-```text
-00_start_here/                   onboarding + learning pathways
-01_foundations/                  medicine-for-CS and CS-for-medicine bridge modules
-02_data_ethics_reproducibility/  bias, governance, and reproducible workflows
-03_hands_on/                     notebooks, source code, configs, tests
-04_case_studies/                 guided case studies + capstone projects
-05_publish/                      website, slides, manuscript for impact
-assets/                          figures and images used across the project
-data/                            tutorial-safe sample data and datasheets
-glossary/                        plain-language term definitions
-references/                      reading lists and citations
-community/                       contribution and learner support docs
+## Prerequisites and Setup
+
+Tested with Python 3.11.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install numpy matplotlib scikit-learn notebook openslide-python torch torchvision cucim
+```
+
+OpenSlide may require system libraries. On Ubuntu/Debian:
+
+```bash
+sudo apt-get update && sudo apt-get install -y libopenslide0 openslide-tools
 ```
 
 ## Quick Start
 
-1. Read `00_start_here/README.md`.
-2. Choose your path in `00_start_here/learning_paths.md`.
-3. Start with `03_hands_on/notebooks/01_tutorial_starter.ipynb`.
-4. Move to `04_case_studies/01_guided` and then `04_case_studies/02_capstone`.
-5. Publish your outputs from `05_publish/`.
+Estimated time to first successful run: 40 to 60 minutes.
 
-## Quick Taste (Single Code Block)
+1. Read `00_start_here/README.md` (5 to 10 min).
+2. Choose a path in `00_start_here/learning_paths.md` (5 min).
+3. Run `03_hands_on/notebooks/01_tutorial_starter.ipynb` (30 to 45 min).
+4. Complete `04_case_studies/01_guided` then `04_case_studies/02_capstone` (2 to 4+ hours).
 
-```python
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+## Pipeline Walkthrough
 
-np.random.seed(42)
-X = np.random.normal(size=(200, 12))
-y = (X[:, 0] + 0.5 * X[:, 1] > 0).astype(int)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
-model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
-model.fit(X_train, y_train)
-print("Baseline accuracy:", round(accuracy_score(y_test, model.predict(X_test)), 3))
+### 1) Data Processing
+
+Purpose: prepare whole-slide image data for stable downstream modeling, including patch extraction and encoding.  
+Output: preprocessing logs, patch sets/coordinates, encoded patch features, and slide-level bags for MIL.
+
+<p align="center">
+  <img src="assets/images/pipeline/01_data_processing/overview.svg" alt="Data processing stage" width="100%">
+</p>
+
+#### Patch Extraction
+
+Purpose: split WSIs into meaningful tissue patches and remove low-value regions.  
+Output: patch sets, coordinates, and extraction metadata.
+
+
+#### Feature Encoding
+
+Purpose: convert each patch into a compact numerical representation and organize features into slide-level bags.  
+Output: encoded patch feature vectors and bagged embeddings for MIL training/evaluation.
+
+
+### 2) Attention-Based MIL Classifier
+
+Purpose: aggregate patch-level evidence into a slide-level representation.  
+Output: attention scores, pooled representation, and slide-level logits.
+
+
+### 3) Interpretability and Visualization
+
+Purpose: make model decisions understandable to clinicians and technical teams.  
+Output: attention heatmaps, top-attended tiles, and visual QA artifacts.
+
+<p align="center">
+  <img src="assets/images/heatmap.jpg" alt="Slide attention heatmap" width="72%">
+</p>
+
+
+### 4) Advanced Methods (Planned)
+
+Purpose: expose learners to modern, high-impact research directions after they master the core workflow.
+
+Coverage:
+- Self-supervised foundation encoders (including UNI and related models)
+- Diffusion models (for example, PixCell-style pipelines) to generate synthetic tiles
+- Evaluation of real vs synthetic data for robustness, bias, and generalization
+
+
+
+## Repository Map
+
+Top-level numbering note: `02_*` is intentionally reserved for an upcoming bridge module between foundations and hands-on implementation.
+
+```text
+00_start_here/                   onboarding and learner pathways
+01_foundations/                  medicine-for-CS and CS-for-medicine bridge modules
+03_hands_on/                     notebooks, source modules, configs, tests
+04_case_studies/                 guided projects and capstone work
+assets/                          shared visuals and diagrams
+data/                            tutorial-safe sample data and datasheets
+glossary/                        plain-language definitions
+references/                      reading lists and citations
+community/                       contribution and learner support docs
 ```
 
-## Advanced Methods (Planned)
+## How To Cite This Tutorial
 
-This tutorial will also include advanced modules for modern pathology AI:
-- Self-supervised learning (SSL) encoders, including UNI and other foundation encoders.
-- Diffusion-based models (for example, PixCell) to generate synthetic pathology tiles for augmentation and experimentation.
-- Practical comparison of baseline vs foundation-model pipelines in realistic case studies.
+If this repository helps your work, please cite it.
 
-## Publication-Ready Outputs
+1. Use GitHub's `Cite this repository` button (powered by `CITATION.cff`).
+2. Or copy the BibTeX below.
 
-`05_publish/` is where final impact assets live:
-- `website/`: public tutorial/docs site.
-- `slides/`: workshop, class, or conference presentation.
-- `manuscript/`: report, paper, or preprint draft.
+```bibtex
+@software{computational_pathology_tutorial,
+  title        = {Computational Pathology Tutorial},
+  author       = {{Weiyi Qin}},
+  year         = {2026},
+  version      = {0.1.0},
+  url          = {https://github.com/W8Yi/Computational-Pathology-Tutorial},
+  note         = {Beginner-friendly tutorial for computational pathology}
+}
+```
+
+See `CITATION.cff` for machine-readable citation metadata.
+
+## What We Cite
+
+Current cited sources are tracked in:
+- `references/cited_sources.md`
+
+This currently includes:
+- TCGA program/source context
+- The precomputed UNI2-h TCGA feature dataset release
+- Planned advanced-method references (UNI/UNI2 primary paper links and PixCell diffusion reference links to be pinned as modules are finalized)
 
 ## Project Status
 
-- [x] Core folder scaffold created
-- [x] Starter notebook template added
-- [ ] First full foundations module
-- [ ] First guided case study
-- [ ] Public website and slide deck
+- [x] Beginner-friendly project scaffold
+- [x] Starter notebook template
+- [x] Detailed pipeline README sections with stage visuals
+- [ ] Full foundations module content
+- [ ] First complete guided case study
 
 ## License
 
-This project is released under the [MIT License](LICENSE).
+This repository is released under the [MIT License](LICENSE).
