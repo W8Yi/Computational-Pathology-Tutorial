@@ -50,6 +50,32 @@ community/                       contribution and learner support docs
 4. Move to `04_case_studies/01_guided` and then `04_case_studies/02_capstone`.
 5. Publish your outputs from `05_publish/`.
 
+## Quick Taste (Single Code Block)
+
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+np.random.seed(42)
+X = np.random.normal(size=(200, 12))
+y = (X[:, 0] + 0.5 * X[:, 1] > 0).astype(int)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
+model.fit(X_train, y_train)
+print("Baseline accuracy:", round(accuracy_score(y_test, model.predict(X_test)), 3))
+```
+
+## Advanced Methods (Planned)
+
+This tutorial will also include advanced modules for modern pathology AI:
+- Self-supervised learning (SSL) encoders, including UNI and other foundation encoders.
+- Diffusion-based models (for example, PixCell) to generate synthetic pathology tiles for augmentation and experimentation.
+- Practical comparison of baseline vs foundation-model pipelines in realistic case studies.
+
 ## Publication-Ready Outputs
 
 `05_publish/` is where final impact assets live:
